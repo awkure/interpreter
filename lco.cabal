@@ -1,0 +1,62 @@
+name:                lco
+version:             0.0.1.0
+synopsis:            Experimental interpreter
+homepage:            https://github.com/awkure/lco#readme
+license:             MIT  
+license-file:        LICENSE
+author:              awkure
+maintainer:          awkure@protonmail.ch
+build-type:          Simple
+extra-source-files:  README.md
+cabal-version:       >=1.10
+tested-with:         GHC == 8.0.2
+                   , GHC == 7.10.3
+                   , GHC == 7.8.4 
+
+flag template-haskell
+  default: True
+  manual:  True
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     LCO.Core
+                     , LCO.Core.Template
+                     , LCO.Core.Types
+                     , LCO.Core.Interpreter
+  build-depends:       base >= 4.7 && < 5
+                     , vector == 0.12.0.1 
+                     , mtl 
+                     , transformers
+                     , semigroupoids
+                     , neat-interpolation
+                     , composition
+                     , lens 
+                     , recursion-schemes
+                     , containers == 0.5.7.1
+                     , parsec 
+  
+  if flag(template-haskell) && impl(ghc)
+    build-depends:     template-haskell     == 2.11.1.0
+  
+  default-language:    Haskell2010
+
+executable lco-exe
+  hs-source-dirs:      app
+  main-is:             Main.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N -Wdeprecations
+  build-depends:       base
+                     , lco
+  default-language:    Haskell2010
+
+test-suite lco-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Spec.hs
+  build-depends:       base
+                     , lco
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  default-language:    Haskell2010
+
+source-repository head
+  type:     git
+  location: https://github.com/awkure/lco
